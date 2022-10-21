@@ -1,6 +1,3 @@
-from re import template
-from sys import exec_prefix
-from urllib import request
 from flask import Flask, render_template, request, redirect, session
 import sqlite3 as sql
 
@@ -25,39 +22,42 @@ def about():
 def index():
     return render_template('index.html')    
 
+print("before route")
 
-app.route('/addrec',methods = ['POST','GET'])
+@app.route('/addrec',methods = ['POST', 'GET'])
 def addrec():
-    if request.method == 'POST':
-        try:
-            email = request.form['email']
-            password = request.form['password']
-            address = request.form['address']
-            city = request.form['city']
-            state = request.form['state']
-            zip = request.form['zip']
-            
-            with sql.connect("students.db") as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO students(email,password,address,city,state,zip) VALUES (?,?,?,?,?,?)",(email,password,address,city,state,zip))
-                con.commit
-                msg = "Record Added"
-        except:
-            con.rollback()
-            msg = "Error in insert operation"
-        finally:
-            return render_template("list.html",msg=msg)
-            con.close()    
+   if request.method == 'POST':
+      try:
+         name = request.form['name']
+         addr = request.form['address']
+         city = request.form['city']
+         pin = request.form['pin']
+         
+         with sql.connect("student_database.db") as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO students (name,addr,city,pin) VALUES (?,?,?,?)",(name,addr,city,pin) )
+            con.commit()
+            msg = "Record successfully added!"
+      except:
+         con.rollback()
+         msg = "error in insert operation"
+      
+      finally:
+         return render_template("list.html",msg = msg)
+         con.close()
+
+
 
 @app.route('/list')
 def list():
-    con = sql.connect("students.db")
-    con.row_factory = sql.Row
+   con = sql.connect("student_database.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+   cur.execute("select * from students")
+   
+   students = cur.fetchall();
+   return render_template("list.html", students = students)
 
-    cur = con.cursor()
-    cur.execute("select * from students")
-
-    students = cur.fetchall()
-    return render_template("list.html", students = students)
 if __name__ == '__main__':
-    app.run(debug = True)    
+   app.run(debug = True)
