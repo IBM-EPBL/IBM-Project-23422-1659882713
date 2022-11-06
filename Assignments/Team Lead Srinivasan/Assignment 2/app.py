@@ -9,22 +9,23 @@ app.secret_key = 'fasdgfdgdfg'
 def home():
    return render_template('home.html')
 
+
 @app.route('/signin')
 def signin():
-    return render_template('signin.html')    
+    return render_template('signin.html')
+
 
 @app.route('/about')
 def about():
-    return render_template('about.html')    
-
-
+    return render_template('about.html')
 
 
 @app.route('/addstudent')
 def new_student():
    return render_template('add_student.html')
 
-@app.route('/addrec',methods = ['POST', 'GET'])
+
+@app.route('/addrec', methods=['POST', 'GET'])
 def addrec():
    if request.method == 'POST':
       try:
@@ -32,30 +33,33 @@ def addrec():
          addr = request.form['address']
          city = request.form['city']
          pin = request.form['pin']
-         
+
          with sql.connect("student_database.db") as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO students (name,addr,city,pin) VALUES (?,?,?,?)",(name,addr,city,pin) )
+            cur.execute(
+                "INSERT INTO students (name,addr,city,pin) VALUES (?,?,?,?)", (name, addr, city, pin))
             con.commit()
             msg = "Record successfully added!"
       except:
          con.rollback()
          msg = "error in insert operation"
-      
+
       finally:
-         return render_template("list.html",msg = msg)
+         return render_template("list.html", msg=msg)
          con.close()
+
 
 @app.route('/list')
 def list():
    con = sql.connect("student_database.db")
    con.row_factory = sql.Row
-   
+
    cur = con.cursor()
    cur.execute("select * from students")
-   
-   students = cur.fetchall();
-   return render_template("list.html", students = students)
+
+   students = cur.fetchall()
+   return render_template("list.html", students=students)
+
 
 if __name__ == '__main__':
-   app.run(debug = True)
+   app.run(debug=True)
