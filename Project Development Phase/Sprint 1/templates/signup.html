@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Signup page</title>
+{% endblock %}
+
+{% block body %}
+<div class="seperator">
+  <div class="item1">
+    <img class="wave" src="{{ url_for('static', filename='images/wave.png')}}">
+  </div>
+
+
+
+  <div class="item1">
+    <h2>Signup Here</h2>
+    <div class="flashMessage">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <p>{{msg}}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    <form action="{{ url_for('addrec') }}" method="POST">
+      
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name">
+      
+      <label for="dob">Date of Birth</label>
+      <input type="text" id="dob" name="dob">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email">
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" name="mobile">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password">
+
+      <label for="repass">Repeat Password</label>
+      <input type="password" id="repass" name="repass">
+
+      <input type="submit" value="Signup" id="signupbutton" onclick="myfunction()">
+      <p>Already have account login <a href="/signin">here</a></p>
+    </form>
+
+
+  </div>
+</div>
+{% endblock %}
