@@ -14,8 +14,18 @@
   
   
 	<div class="item1">
+
 	  <h2>Login Here</h2>
-	  <form action="#" id="loginform">
+	  <div class="flashMessage">
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+			{% for msg in messages %}
+			  <p style="color: #ea1538; font-size: 1.4em;">{{msg}}</p>
+			{% endfor %}
+		  {% endif %}
+		{% endwith %}
+	  </div>
+	  <form action="{{ url_for('loginValidate') }}" id="loginform" method="POST">
 		<label for="email">Email</label>
 		<input type="email" id="email" name="email">
   

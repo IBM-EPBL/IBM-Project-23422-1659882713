@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Signin page</title>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"> -->
+{% endblock %}
+
+{% block body %}
+    <div class="dashboardDetails">
+        <a href="#">Status</a>
+        <a href="#">Complaint</a>
+        <a href="#">Feedback</a>
+    </div>
+    <div class="jumbotron">
+        <h1 class="display-6">WELCOME</h1>
+        <p class="lead">Here you can register your complaints by clicking complaint button and also you can check your status of the complaints.</p>
+        <hr class="my-4">
+        <p class="learnmoreBrief">Still do you want to know more about this site click the button below</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        </p>
+      </div>
+{% endblock %}

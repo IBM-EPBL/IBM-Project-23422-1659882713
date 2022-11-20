@@ -8,15 +8,46 @@ from markupsafe import escape
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=ba99a9e6-d59e-4883-8fc0-d6a8c9f7a08f.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=31321;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=hmy36820;PWD=UFDsIyZBi3LvV6u9",'','')
 
 app = Flask(__name__,static_url_path='/static')
+app.secret_key = "helloabcde"
 
 
 @app.route('/signin')
 def signin():
-    return render_template('signin.html')    
+  return render_template('signin.html')    
+
+@app.route('/loginValidate',methods = ['POST', 'GET'])
+def loginValidate():
+    uid = request.form['email']
+    pwd = request.form['password']
+    sql = 'SELECT name from users WHERE email=? AND password=?'
+    pstmt = ibm_db.prepare(conn, sql)
+    ibm_db.bind_param(pstmt, 1, uid)
+    ibm_db.bind_param(pstmt, 2, pwd)
+    ibm_db.execute(pstmt)
+
+    acc = ibm_db.fetch_assoc(pstmt)
+
+    if acc:  # if the user is already registered to the application
+        session['username'] = acc['NAME']
+        flash('Signed in successfully!')
+        return render_template('dashboard.html')
+
+    else:  # warn upon entering incorrect credentials
+        flash('Incorrect credentials. Please try again!')
+        return render_template('signin.html')
+    
 
 @app.route('/signup')
 def signup():
     return render_template('signup.html')    
+
+@app.route('/dashboard')
+def dashboard():
+    def dashboard():
+      if 'username' not in session:
+        # ask user to sign in if not done already
+        return redirect(url_for('signin'))
+    return render_template('dashboard.html')    
 
 @app.route('/about')
 def about():
@@ -44,8 +75,8 @@ def addrec():
     account = ibm_db.fetch_assoc(stmt)
 
     if account:
-      # flash("Your email is already registered.......")
-      return render_template('index.html',msg="your already registered....")
+      flash("Your email is already registered.......")
+      return render_template('signup.html')
     else:
       insert_sql = "INSERT INTO users VALUES (?,?,?,?,?,?)"
       prep_stmt = ibm_db.prepare(conn, insert_sql)
@@ -57,5 +88,5 @@ def addrec():
       ibm_db.bind_param(prep_stmt, 6, repass)
       ibm_db.execute(prep_stmt)
     
-    # flash("Your account created successfully")
-    return render_template('index.html', msg="Student Data saved successfuly..")
+      flash("Your account created successfully please login with your details")
+  return render_template('signup.html')
