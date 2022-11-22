@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Admin page</title>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <style>
+        ul{
+            display: none;
+        }
+        
+    </style>
+{% endblock %}
+    <h2>{{msg}}</h2>
+{% block body %}
+
+
+{% endblock%}

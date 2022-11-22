@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Complaint page</title>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <style>
+        ul{
+            display: none;
+        }
+        
+    </style>
+    <script>
+        
+        function redirect() {
+            if(document.getElementById("exampleFormControlInput1").value=="" || document.getElementById("exampleFormControlTextarea1")==""){
+            alert("Both Fields are required")
+            return false
+            }    
+            return true
+      }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="complaints">
+        <div class="dashboardDetails">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/complaintRegistration">Status</a>
+            <a href="#">Complaint</a>
+            <a href="#">Feedback</a>
+        </div>
+    </div>
+    <div class="complaintTitleContainer">
+    <h2 class="complaintTitle">Register Your Complaints</h2>
+    </div>
+    <form action="{{ url_for('storeComplaints') }}" onsubmit="return redirect()" method="POST">
+        <div class="registerComplaints">
+             
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" id="exampleFormControlInput1" placeholder="name@example.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Problem that you are facing</label>
+                <textarea class="form-control" name="complaints" id="exampleFormControlTextarea1" rows="3" required></textarea>
+            </div>
+            <button type="submit" id="complaintButton" class="btn btn-primary btn-lg">Submit Here</button>
+        </div>
+    </form>     
+        
+    
+{% endblock %}

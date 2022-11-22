@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Signup page</title>
+    <script>
+      function validate(){
+        if(document.getElementById("password").value == document.getElementById("repass").value){
+          return true;
+        }
+        alert("Two passwords are mismatch");
+        return false;
+      }
+    </script>
+{% endblock %}
+
+{% block body %}
+<div class="seperator">
+  <div class="item1">
+    <img class="wave" src="{{ url_for('static', filename='images/wave.png')}}">
+  </div>
+
+
+
+  <div class="item1">
+    <h2>Signup Here</h2>
+    <div class="flashMessage">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <p style="color: #ea1538; font-size: 1.4em;">{{msg}}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    <!--  -->
+    <form action="{{ url_for('addrec') }}" onsubmit="return validate()" method="POST" class="common">
+      
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+      
+      <label for="dob">Date of Birth</label>
+      <input type="text" id="dob" name="dob" required placeholder="dd-mm-yyyy">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="example@gmail.com">
+
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" name="mobile" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="repass">Repeat Password</label>
+      <input type="password" id="repass" name="repass" required>
+
+      <input type="submit" value="Signup" id="signupbutton">
+      <p>Already have account login <a href="/signin">here</a></p>
+    </form>
+
+
+  </div>
+</div>
+{% endblock %}
